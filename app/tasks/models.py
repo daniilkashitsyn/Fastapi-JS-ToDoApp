@@ -1,7 +1,9 @@
 from pydantic import BaseModel
 
 
+class Task(BaseModel):
+    pass
+
+
 class Group(BaseModel):
-    group_id: int
-    group_name: str
-    # group_tasks:
+    pass
