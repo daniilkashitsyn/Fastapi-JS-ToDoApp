@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from app.groups.groups import router as groups_router
 
 app = FastAPI(
     title="ToDo"
@@ -9,6 +10,5 @@ app = FastAPI(
 def get_main():
     return "This is main page"
 
-@app.get("/name")
-def maim():
-    pass
+
+app.include_router(groups_router)
