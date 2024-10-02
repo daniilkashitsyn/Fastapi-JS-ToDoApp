@@ -1,9 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
 
-from app.groups.groups import router as groups_router
+from app.tasks.groups import router as groups_router
 
 app = FastAPI(
     title="ToDo"
