@@ -1,5 +1,5 @@
 from app.database import Base
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Integer, String, Date, JSON
 
 
 class Tasks(Base):
@@ -8,11 +8,16 @@ class Tasks(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     description = Column(String)
+    # group = Column(String)
     start_date = Column(Date)
     end_date = Column(Date)
-    priority = Column()
-    status = Column()
+    priority = Column(JSON)
+    status = Column(JSON)
 
 
 class Groups(Base):
-    pass
+    __tablename__ = "groups"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    # tasks = Column(String)
