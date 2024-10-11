@@ -13,4 +13,4 @@ async def get_tasks():
 
 @router.get("/{task_id}")
 async def get_task(task_id):
-    pass
+
