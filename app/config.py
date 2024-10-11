@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     @root_validator(pre=True)
     def get_database_url(cls, v):
-        v["DATABASE_URL"] = (f"postgresql+asyncpg://{v['DB_USER']}:{v['DB_PASS']}@{v['DB_HOST']}:{v['DB_PORT']}/{v['DB_NAME']}")
+        v["DATABASE_URL"] = f"postgresql+asyncpg://{v['DB_USER']}:{v['DB_PASS']}@{v['DB_HOST']}:{v['DB_PORT']}/{v['DB_NAME']}"
         return v
 
     class Config:

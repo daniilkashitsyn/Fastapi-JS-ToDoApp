@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-router = APIRouter(prefix="/groups", tags=["Groups page"])
+router = APIRouter(prefix="/groups", tags=["Группы задач"])
 
 
 @router.get("/")
