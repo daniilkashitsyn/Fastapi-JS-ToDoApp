@@ -5,4 +5,4 @@ router = APIRouter(prefix="/groups", tags=["Группы задач"])
 
 @router.get("/")
 def get_groups():
-    return "This is groups page"
+    return "pages"
