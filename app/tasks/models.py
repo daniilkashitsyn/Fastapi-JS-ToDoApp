@@ -14,6 +14,7 @@ class Tasks(Base):
     end_date = Column(Date)
     priority = Column(String)
     status = Column(String)
+    user_id = Column(ForeignKey("Users.id"))
 
 
 class Groups(Base):
@@ -22,3 +23,4 @@ class Groups(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     tasks_id = Column(ForeignKey("tasks.id"))
+    user_id = Column(ForeignKey("Users.id"))

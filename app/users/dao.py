@@ -8,3 +8,4 @@ from app.users.users import Users
 class UsersDAO(BaseDAO):
     model = Users
 
+    
