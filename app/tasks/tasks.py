@@ -14,5 +14,5 @@ async def get_tasks(user: Users = Depends(get_current_user)) -> list[STasks]:
 
 
 @router.get("/{task_id}")
-async def get_task(task_id: int):  # -> list[STasks]:
-    return TasksDAO.find_by_id(task_id)
+async def get_task(task_id: int) -> STasks:
+    return await TasksDAO.find_by_id(task_id)
