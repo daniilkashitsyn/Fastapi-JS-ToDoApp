@@ -1,6 +1,5 @@
 from app.database import Base
-from sqlalchemy import Column, Integer, String, Date, JSON, ForeignKey, Enum
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, Date, ForeignKey
 
 
 class Tasks(Base):
@@ -14,8 +13,7 @@ class Tasks(Base):
     end_date = Column(Date)
     priority = Column(String)
     status = Column(String)
-    user_id = Column(ForeignKey("Users.id"))
-    user = relationship("User", back_populates="tasks")
+    user_id = Column(ForeignKey("Users.id"), nullable=False)
 
 
 class Groups(Base):
@@ -24,5 +22,4 @@ class Groups(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     tasks_id = Column(ForeignKey("tasks.id"))
-    user_id = Column(ForeignKey("Users.id"))
-    user = relationship("User", back_populates="groups")
+    user_id = Column(ForeignKey("Users.id"), nullable=False)

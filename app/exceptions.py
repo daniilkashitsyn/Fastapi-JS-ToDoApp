@@ -29,3 +29,13 @@ UserIsNotPresentException = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="Пользователь не найден",
 )
+
+TaskNotFoundException = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+     detail="Задача не найдена"
+)
+
+GroupNotFoundException = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+     detail="Группа не найдена"
+)

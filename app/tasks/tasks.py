@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Depends
 
+from app.exceptions import TaskNotFoundException
 from app.tasks.dao import TasksDAO
 from app.tasks.shemas import STasks
 from app.users.dependencies import get_current_user
@@ -14,10 +15,8 @@ async def get_tasks(user: Users = Depends(get_current_user)) -> list[STasks]:
 
 
 @router.get("/{task_id}")
-async def get_task(task_id: int) -> STasks:
-    return await TasksDAO.find_by_id(task_id)
-
-
-@router.post("/add")
-async def add_task(user: Users = Depends(get_current_user)):
-    pass
+async def get_task(task_id: int, user: Users = Depends(get_current_user)) -> STasks:
+    task = await TasksDAO.find_by_id_and_user(task_id, user.id)
+    if not task:
+        raise TaskNotFoundException
+    return task

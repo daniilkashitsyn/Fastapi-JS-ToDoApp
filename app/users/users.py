@@ -14,5 +14,3 @@ class Users(Base):
     completed_tasks = Column(Integer, nullable=False, default=0)
     progress_tasks = Column(Integer, nullable=False, default=0)
     archived_tasks = Column(Integer, nullable=False, default=0)
-    tasks = relationship("Task", back_populates="user")
-    groups = relationship("Group", back_populates="user")
