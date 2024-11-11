@@ -47,5 +47,9 @@ async def change_task_by_id(task_data, user: Users = Depends(get_current_user)):
 
 
 @router.delete("{task_id}/del")
-async def delete_task_by_id(task_id, user: Users = Depends(get_current_user)):
-    pass
+async def delete_task_by_id(task_id: int, user: Users = Depends(get_current_user)):
+    task = await TasksDAO.find_by_id_and_user(id=task_id, user_id=user.id)
+    if task is None:
+        raise TaskNotFoundException
+    await TasksDAO.delete_by_id_and_user(id=task_id, user_id=user.id)
+    return {"message": "Задача удалена"}
