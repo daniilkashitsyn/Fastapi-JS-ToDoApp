@@ -33,3 +33,14 @@ class TasksDAO(BaseDAO):
 
 class GroupsDAO(BaseDAO):
     model = Groups
+
+    @classmethod
+    async def create_group(cls, name: str, user_id: int):
+        async with async_session_maker() as session:
+            query = insert(cls.model).values(
+                name=name,
+                user_id=user_id
+            )
+
+            await session.execute(query)
+            await session.commit()

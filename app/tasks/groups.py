@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.exceptions import GroupNotFoundException
 from app.tasks.dao import GroupsDAO
-from app.tasks.shemas import SGroups
+from app.tasks.shemas import SGroups, SGroupCreate
 from app.users.dependencies import get_current_user
 from app.users.users import Users
 
@@ -21,3 +21,13 @@ async def get_group(group_id: int, user: Users = Depends(get_current_user)) -> S
     if not group:
         raise GroupNotFoundException
     return group
+
+
+@router.post("/add-group")
+async def add_group(group_data: SGroupCreate, user: Users = Depends(get_current_user)):
+    await GroupsDAO.create_group(
+        name=group_data.name,
+        user_id=user.id
+    )
+
+    return {"message": "Группа создана"}
