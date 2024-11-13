@@ -34,8 +34,13 @@ async def add_group(group_data: SGroupCreate, user: Users = Depends(get_current_
 
 
 @router.patch("{group_id}/change")
-async def change_group(group_data: SGroupCreate, user: Users = Depends(get_current_user)):
-    pass
+async def change_group(group_id: int, group_data: SGroupCreate, user: Users = Depends(get_current_user)):
+    group = await GroupsDAO.find_by_id_and_user(id=group_id, user_id=user.id)
+    if group is None:
+        raise GroupNotFoundException
+    update_data = group_data.dict(exclude_unset=True)
+    await GroupsDAO.change_group(group_id=group_id, data=update_data)
+    return {"message": "Группа обновлена"}
 
 
 @router.delete("{group_id}/delete")
@@ -43,7 +48,5 @@ async def delete_group(group_id: int, user: Users = Depends(get_current_user)):
     group = await GroupsDAO.find_by_id_and_user(id=group_id, user_id=user.id)
     if group is None:
         raise GroupNotFoundException
-
     await GroupsDAO.delete_by_id_and_user(id=group_id, user_id=user.id)
-
     return {"message": "Группа удалена"}

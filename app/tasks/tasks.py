@@ -45,15 +45,11 @@ async def add_task(task_data: STaskCreate, user: Users = Depends(get_current_use
 @router.patch("{task_id}/ch")
 async def change_task_by_id(task_id: int, task_data: STaskChange, user: Users = Depends(get_current_user)):
     task = await GroupsDAO.find_by_id_and_user(id=task_id, user_id=user.id)
-
     if task is None:
         raise TaskNotFoundException
-
     update_data = task_data.dict(exclude_unset=True)
-
     if update_data:
         await TasksDAO.change_task(task_id=task_id, data=update_data)
-
     return {"message": "Задача успешно обновлена"}
 
 

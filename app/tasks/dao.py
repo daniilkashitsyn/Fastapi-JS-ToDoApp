@@ -47,3 +47,10 @@ class GroupsDAO(BaseDAO):
 
             await session.execute(query)
             await session.commit()
+
+    @classmethod
+    async def change_group(cls, group_id: int, data):
+        async with async_session_maker() as session:
+            query = update(cls.model).where(cls.model.id == group_id).values(data)
+            await session.execute(query)
+            await session.commit()
