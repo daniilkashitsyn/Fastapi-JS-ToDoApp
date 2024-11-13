@@ -1,4 +1,4 @@
-from sqlalchemy import insert
+from sqlalchemy import insert, update
 
 from app.dao.base import BaseDAO
 from app.database import async_session_maker
@@ -27,8 +27,11 @@ class TasksDAO(BaseDAO):
             await session.commit()
 
     @classmethod
-    async def change_group(cls, group_name):
-        pass
+    async def change_task(cls, task_id: int, data):
+        async with async_session_maker() as session:
+            query = update(cls.model).where(cls.model.id == task_id).values(**data)
+            await session.execute(query)
+            await session.commit()
 
 
 class GroupsDAO(BaseDAO):
