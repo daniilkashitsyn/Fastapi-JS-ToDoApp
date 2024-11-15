@@ -17,3 +17,11 @@ async def get_tasks_page(request: Request, tasks=Depends(get_tasks)):
         name="tasks.html",
         context={"request": request, "tasks": tasks}
     )
+
+
+@router.get("/login")
+async def login_page(request: Request):
+    return templates.TemplateResponse(
+        name="login.html",
+        context={"request": request}
+    )
