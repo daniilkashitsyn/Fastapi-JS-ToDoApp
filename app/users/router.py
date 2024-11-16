@@ -4,7 +4,7 @@ from app.exceptions import UserAlreadyExistsException, IncorrectEmailOrPasswordE
 from app.users.auth import get_password_hash, authenticate_user, create_access_token
 from app.users.dao import UsersDAO
 from app.users.dependencies import get_current_user, get_current_admin_user
-from app.users.schemas import SUserAuth
+from app.users.schemas import SUserAuth, SUserReg
 from app.users.users import Users
 
 router = APIRouter(
@@ -14,7 +14,7 @@ router = APIRouter(
 
 
 @router.post("/register")
-async def register_user(user_data: SUserAuth):
+async def register_user(user_data: SUserReg):
     existing_user = await UsersDAO.find_one_or_none(email=user_data.email)
     if existing_user:
         raise UserAlreadyExistsException
