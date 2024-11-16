@@ -22,6 +22,14 @@ async def get_tasks_page(request: Request, tasks=Depends(get_tasks)):
 @router.get("/login")
 async def login_page(request: Request):
     return templates.TemplateResponse(
-        name="login.html",
+        name="auth/login.html",
+        context={"request": request}
+    )
+
+
+@router.get("/reg")
+async def reg_page(request: Request):
+    return templates.TemplateResponse(
+        name="auth/registration.html",
         context={"request": request}
     )
