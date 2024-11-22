@@ -2,27 +2,130 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Авторизация</title>
+<!--    <link rel="stylesheet" type="text/css" href="../assets/css/login.css">-->
 </head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #FAF9F9;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        height: 97px;
+        background-color: rgb(255, 255, 255);
+        text-align: center;
+        align-content: center;
+        font-family: "Roboto Thin", serif;
+        font-size: 36px;
+    }
+
+    .login-container {
+        width: 927px;
+        height: 500px;
+        max-height: calc(100vh - 97px);
+        max-width: calc(100vh - 97px);
+        background-color: #d9d9d9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border-radius: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        text-align: center;
+        font-family: "Roboto Thin", serif;
+        font-size: 28px;
+
+        /* Центрирование блока */
+        margin: 0 auto;
+        position: relative;
+        top: calc((100vh - 97px - 66.66vh) / 2);
+    }
+
+    .login-container * {
+        margin: 35px;
+    }
+
+    .login-cont * {
+        margin: 25px;
+    }
+
+    .login-cont input, label{
+        display: block;
+    }
+
+    input {
+        height: 45px;
+        width: 450px;
+        border-radius: 35px;
+        border: none;
+        font-size: 24px;
+        padding: 5px;
+    }
+
+    button {
+        transition: 0.7s;
+        height: 45px;
+        width: 110px;
+        border-radius: 50px;
+        border: none;
+        background-color: #3a3434;
+        color: #FAF9F9;
+        font-family: "Roboto Thin", serif;
+    }
+
+    button:hover {
+        transition: 0.7s;
+        background-color: #FAF9F9;
+        color: #3a3434;
+    }
+
+    @font-face {
+        font-family: "Roboto Thin";
+        src: url("../assets/css/fonts/RobotoMono-VariableFont_wght.ttf");
+    }
+</style>
+<header>
+    Авторизация
+</header>
 <body>
     <div class="login-container">
-        <h2>Login</h2>
         <form id="login-form">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+            <div class="login-cont">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <div class="login-cont">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" required>
+            </div>
 
-            <button type="submit">Login</button>
+            <button type="submit">Войти</button>
+            <button id="to-reg-page">Регистрация</button>
         </form>
     </div>
     <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const responseLogout = await fetch('/auth/logout', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+            })
+        })
+
         document.getElementById('login-form').addEventListener('submit', async (event) => {
             event.preventDefault();
 
             const email = document.getElementById('email').value
             const password = document.getElementById('password').value
+
+            const emailReg = RegExp('^[a-zA-z0-9+]+@[a-zA-z0-9]$')
 
             const response = await fetch('/auth/login', {
                 method: 'POST',
@@ -38,6 +141,10 @@
                 const errorData = await response.json()
                 alert(errorData.detail)
             }
+        })
+
+        document.getElementById('to-reg-page').addEventListener('click', () => {
+            window.location.href = '/pages/reg'
         })
     </script>
 </body>

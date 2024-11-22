@@ -4,22 +4,124 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #FAF9F9;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        height: 97px;
+        background-color: rgb(255, 255, 255);
+        text-align: center;
+        align-content: center;
+        font-family: "Roboto Thin", serif;
+        font-size: 36px;
+    }
+
+    .reg-container {
+        width: 927px;
+        height: 500px;
+        max-height: calc(100vh - 97px);
+        max-width: calc(100vh - 97px);
+        background-color: #d9d9d9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border-radius: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        text-align: center;
+        font-family: "Roboto Thin", serif;
+        font-size: 28px;
+
+        /* Центрирование блока */
+        margin: 0 auto;
+        position: relative;
+        top: calc((100vh - 97px - 66.66vh) / 2);
+    }
+
+    .reg-container * {
+        margin: 10px;
+    }
+
+    .reg-cont * {
+        margin: 15px;
+    }
+
+    .reg-cont input, label{
+        display: block;
+    }
+
+    input {
+        height: 45px;
+        width: 450px;
+        border-radius: 35px;
+        border: none;
+        font-size: 24px;
+        padding: 5px;
+    }
+
+    button {
+        transition: 0.7s;
+        height: 45px;
+        width: 110px;
+        border-radius: 50px;
+        border: none;
+        background-color: #3a3434;
+        color: #FAF9F9;
+        font-family: "Roboto Thin", serif;
+    }
+
+    button:hover {
+        transition: 0.7s;
+        background-color: #FAF9F9;
+        color: #3a3434;
+    }
+
+    @font-face {
+        font-family: "Roboto Thin";
+        src: url("../assets/css/fonts/RobotoMono-VariableFont_wght.ttf");
+    }
+</style>
+<header>
+    Регистрация
+</header>
 <body>
     <div class="reg-container">
         <form id="reg-form">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+            <div class="reg-cont">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
 
-            <label for="nickname">Nickname</label>
-            <input type="text" id="nickname" name="nickname" required>
+            <div class="reg-cont">
+                <label for="nickname">Nickname</label>
+                <input type="text" id="nickname" name="nickname" required>
+            </div>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <div class="reg-cont">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
 
             <button id="submit">Register</button>
         </form>
     </div>
     <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const responseLogout = await fetch('/auth/logout', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+            })
+        })
+
         document.getElementById('reg-form').addEventListener('submit', async (event) => {
             event.preventDefault()
 
@@ -36,6 +138,11 @@
             if (response.ok) {
                 alert('Reg success')
                 window.location.href = '/pages/login'
+                const responseLogin = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ email, password })
+                })
             } else {
                 const errorData = await response.json()
                 alert(errorData.detail)
