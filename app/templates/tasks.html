@@ -1,34 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Задачи</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Задачи{% endblock %}
+
+{% block content %}
     <div>
         {% for task in tasks %}
         <div>
-            <h1>{{task.name}}</h1>
+            <p>{{task.name}}</p>
             <p>{{task.description}}</p>
         </div>
         {% endfor %}
     </div>
     <button id="logout">Logout</button>
-</body>
-<script>
-    const logoutButton = document.getElementById('logout')
+{% endblock %}
 
-    logoutButton.addEventListener('click', async (event) => {
-        event.preventDefault()
+{% block scripts %}
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const menuTasks = document.getElementById('menu-tasks').item('button')
+                const menuGroups = document.getElementById('menu-groups')
+                const menuMain = document.getElementById('menu-main')
 
-        const response = await fetch('/auth/logout', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-        })
-        if (response.ok) {
-            alert('Logout success')
-            window.location.href = '/pages/login'
-        }
-    })
-</script>
-</html>
+            })
+            const logoutButton = document.getElementById('logout')
+
+            logoutButton.addEventListener('click', async (event) => {
+                event.preventDefault()
+
+                const response = await fetch('/auth/logout', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                })
+                if (response.ok) {
+                    alert('Logout success')
+                    window.location.href = '/pages/login'
+                }
+            })
+        </script>
+{% endblock %}

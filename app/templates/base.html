@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>{% block title %}To-Do App{% endblock %}</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .layout {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background-color: rgba(234, 230, 230, 0.4);
+            font-family: "Roboto Thin", sans-serif;
+        }
+
+        .logo span {
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .navigation a {
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 16px;
+            color: black;
+        }
+
+        .search {
+            display: flex;
+            align-items: center;
+            background-color: rgba(199, 199, 199, 0.68);
+            border-radius: 20px;
+            padding: 5px 10px;
+        }
+
+        .search input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            background-color: rgba(199, 199, 199, 0);
+        }
+
+        .search button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search button i {
+            font-size: 16px;
+            color: #999;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .notification {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .notification i {
+            font-size: 20px;
+            color: black;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: #ff0000;
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        .username {
+            font-size: 14px;
+            color: black;
+        }
+
+        .user-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 345px;
+            background-color: #f9f9f9;
+            padding: 20px 10px;
+            height: 100vh;
+        }
+
+        .menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .menu-item {
+            margin-top: 40px;
+        }
+
+        .menu-item button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 245px;
+            height: 70px;
+            padding: 10px;
+            border: none;
+            border-radius: 18px;
+            background-color: #d4d4d4; /* Серый фон */
+            cursor: pointer;
+            font-size: 16px;
+            color: black;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-item.active button {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .menu-item button:hover {
+            background-color: #c0c0c0; /* Цвет при наведении */
+        }
+
+        .main-container {
+            flex: 1; /* Занимает оставшееся место */
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        @font-face {
+            font-family: "Roboto Thin";
+            src: url("assets/css/fonts/RobotoMono-VariableFont_wght.ttf");
+        }
+    </style>
+</head>
+<body class="layout">
+    <header>
+        <div class="logo">
+            <span>To-Do</span>
+        </div>
+        <div class="main">
+            <span>Главная</span>
+        </div>
+        <div class="search">
+            <input type="text" placeholder="Поиск">
+            <button><i class="fa fa-search"></i></button>
+        </div>
+        <div class="user-section">
+            <button class="notification">
+                <i class="fa fa-bell"></i>
+                <span class="notification-count">0</span>
+            </button>
+            <span class="username">User</span>
+            <div class="user-logo" style="background-color: #ffcc00"></div>
+        </div>
+    </header>
+    <div class="content-wrapper">
+        <aside class="sidebar">
+            <ul class="menu">
+                <li class="menu-item active" id="menu-main">
+                    <button>
+                        <span>Главная</span>
+                    </button>
+                </li>
+                <li class="menu-item" id="menu-tasks">
+                    <button>
+                        <span>Задачи</span>
+                    </button>
+                </li>
+                <li class="menu-item" id="menu-groups">
+                    <button>
+                        <span>Группы задач</span>
+                    </button>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-container">
+            {% block content %}
+            <!-- Здесь будет меняться контент страниц -->
+            {% endblock %}
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('menu-main').addEventListener('click', () => {
+            window.location.href = '/pages/main'
+        })
+
+        document.getElementById('menu-tasks').addEventListener('click', () => {
+            window.location.href = '/pages/tasks'
+        })
+
+        document.getElementById('menu-groups').addEventListener('click', () => {
+            window.location.href = '/pages/groups'
+        })
+    </script>
+    {% block scripts %}
+
+    {% endblock %}
+</body>
+</html>
