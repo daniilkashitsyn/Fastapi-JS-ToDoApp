@@ -21,7 +21,6 @@ class STasks(BaseModel):
 class STaskCreate(BaseModel):
     name: str
     description: Optional[str] = None
-    group_id: Optional[int] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     priority: Optional[str] = None
@@ -34,7 +33,6 @@ class STaskCreate(BaseModel):
 class STaskChange(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
-    group_id: Optional[int] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     priority: Optional[str] = None

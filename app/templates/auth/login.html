@@ -125,8 +125,6 @@
             const email = document.getElementById('email').value
             const password = document.getElementById('password').value
 
-            const emailReg = RegExp('^[a-zA-z0-9+]+@[a-zA-z0-9]$')
-
             const response = await fetch('/auth/login', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -134,8 +132,9 @@
             });
 
             if (response.ok) {
-                const accessToken = await response.text()
+                const {accessToken, nickname} = await response.json()
                 document.cookie = `todo_access_token=${accessToken}; path=/; HttpOnly`
+                localStorage.setItem('nickname', nickname)
                 window.location.href = '/pages/tasks'
             } else {
                 const errorData = await response.json()

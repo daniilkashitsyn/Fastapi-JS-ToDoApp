@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}Задачи{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Calibri, sans-serif;
+    }
+
+    .tasks-container {
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+    }
+
+    .tasks-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .tasks-header span {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    #add-task-button {
+        font-size: 24px;
+        padding: 5px 10px;
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .tasks-table-wrapper {
+        max-height: 300px; /* Ограничение высоты */
+        overflow-y: auto; /* Вертикальная прокрутка */
+        overflow-x: auto; /* Горизонтальная прокрутка */
+    }
+
+    .tasks-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .tasks-table th, .tasks-table td {
+        text-align: center;
+        padding: 10px;
+        border: 0;
+    }
+
+    .tasks-table th {
+        background-color: #f2f2f2;
+    }
+
+    .tasks-table td.priority-low {
+        color: #5ae15a;
+        font-weight: bold;
+    }
+
+    .tasks-table td.priority-medium {
+        color: orange;
+        font-weight: bold;
+    }
+
+    .tasks-table td.priority-high {
+        color: red;
+        font-weight: bold;
+    }
+
+    .tasks-table td.status-done span{
+        background-color: #d4edda;
+        color: #155724;
+        border-radius: 5px;
+    }
+
+    .tasks-table td.status-in-progress span{
+        background-color: #cce5ff;
+        color: #004085;
+        border-radius: 5px;
+    }
+
+    .tasks-table td.status-not-started span{
+        background-color: #f8d7da;
+        color: #721c24;
+        border-radius: 5px;
+    }
+
+    .tasks-table td.status-archived span{
+        background-color: #e2e3e5;
+        color: #6c757d;
+        border-radius: 5px;
+    }
+
+    .start-date span {
+        padding: 5px 10px;
+        background-color: #cbcbcb;
+        border-radius: 50px;
+    }
+
+    .end-date span {
+        padding: 5px 10px;
+        background-color: #cbcbcb;
+        border-radius: 50px;
+    }
+
+</style>
+<div class="tasks-container">
+    <div class="tasks-header">
+        <span>Группы задач</span>
+        <button id="add-task-button">+</button>
+    </div>
+    <div class="tasks-table-wrapper">
+        <table class="tasks-table">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+            </tr>
+            </thead>
+            <tbody id="tasks-list">
+            {% for group in groups %}
+            <tr class="task-row" data-id="{{ group.id }}">
+                <td class="name">{{ group.name }}</td>
+                <td class="description"><span>{{ group.start_date }}</span></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<button id="logout">Logout</button>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const currentPath = window.location.pathname
+
+        const menuItems = document.querySelectorAll('.menu-item')
+
+        menuItems.forEach((item) => {
+            const link = item.dataset.link
+
+            if (link === currentPath) {
+                item.classList.add('active')
+            } else {
+                item.classList.remove('active')
+            }
+        })
+
+        document.querySelectorAll('.priority').forEach((item) => {
+            switch (item.textContent) {
+                case 'Низкий':
+                    item.classList.add('priority-low')
+                    break;
+                case 'Средний':
+                    item.classList.add('priority-medium')
+                    break;
+                case 'Высокий':
+                    item.classList.add('priority-high')
+                    break;
+            }
+        })
+
+        document.querySelectorAll('.status').forEach((item) => {
+            switch (item.textContent) {
+                case 'В процессе':
+                    item.classList.add('status-in-progress')
+                    break
+                case 'Не начата':
+                    item.classList.add('status-not-started')
+                    break
+                case 'Завершена':
+                    item.classList.add('status-done')
+                    break
+                case 'Архив':
+                    item.classList.add('status-archived')
+                    break
+            }
+        })
+
+        document.getElementById('task-count').textContent = {{ groups | length }}
+        document.querySelector('.notification-count').textContent = {{ groups | length }}
+        document.getElementById('task-cont').innerText = 'Колчество групп: {{ groups | length }}'
+
+        const taskRows = document.querySelectorAll(".task-row")
+
+        taskRows.forEach(row => {
+            row.addEventListener("click", () => {
+                const groupID = row.dataset.id
+                window.location.href = `/pages/groups/${groupID}`
+            })
+        })
+    })
+    const logoutButton = document.getElementById('logout')
+
+    logoutButton.addEventListener('click', async (event) => {
+        event.preventDefault()
+
+        const response = await fetch('/auth/logout', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+        })
+        if (response.ok) {
+            alert('Logout success')
+            window.location.href = '/pages/login'
+        }
+    })
+
+    document.getElementById('add-task-button').addEventListener("click", () => {
+        window.location.href = '/pages/create-task'
+    })
+</script>
+{% endblock %}

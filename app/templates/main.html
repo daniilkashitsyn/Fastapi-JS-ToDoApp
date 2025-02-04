@@ -2,9 +2,40 @@
 
 {% block title %}Задачи{% endblock %}
 
+{% block style %}
+<style>
+    #welcome {
+        margin-left: 45%;
+        display: inline-block;
+        align-items: center;
+        justify-content: center;
+        font-size: large;
+        font-weight: 900;
+        font-family: Arial, sans-serif;
+    }
+
+    #title {
+        display: block;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        margin-left: 15%;
+        font-family: Arial, sans-serif;
+    }
+
+    #logout {
+        background-color: red;
+    }
+</style>
+{%  endblock %}
+
+
 {% block content %}
-    <div>
-        MAIN
+    <div id="welcome">
+        <p>ДОБРО ПОЖАЛОВАТЬ</p>
+    </div>
+    <div id="title">
+        С помощью нашего продукта вы можете эффективно распределять свое время! Вперед к выполнению своей цели!
     </div>
     <button id="logout">Logout</button>
 {% endblock %}

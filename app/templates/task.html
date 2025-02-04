@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+
+{% block titile %} Задача {% endblock %}
+
+{% block style %}
+<style>
+    /* Общий стиль контейнера */
+    .task-details {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+    }
+
+    /* Заголовок */
+    .task-details h2 {
+        text-align: left;
+        font-size: 22px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /* Строки формы */
+    .form-row {
+        margin-bottom: 15px;
+    }
+
+    .form-row label {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    .form-row input,
+    .form-row textarea {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+        background-color: #f9f9f9;
+    }
+
+    /* Инлайн строки */
+    .form-row-inline {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding-bottom: 10px;
+    }
+
+    .form-item {
+        flex: 1;
+        min-width: 100px;
+    }
+
+    .form-item label {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    .form-item input {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    /* Стили приоритета */
+    .priority-label {
+        display: inline-block;
+        padding: 5px 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .high-priority {
+        background-color: #ffcccc;
+        color: #d00;
+    }
+
+    .medium-priority {
+        background-color: #ffeeba;
+        color: #856404;
+    }
+
+    .low-priority {
+        background-color: #d4f5d4;
+        color: #0a0;
+    }
+
+    /* Стили статуса */
+    .status-label {
+        display: inline-block;
+        padding: 5px 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .not-started {
+        background-color: #f4cccc;
+        color: #d70000;
+    }
+
+    .in-progress {
+        background-color: #cfe2f3;
+        color: #004085;
+    }
+
+    .completed {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .archive {
+        background-color: #3d413e;
+        color: #a28383;
+    }
+
+    /* Кнопки */
+    .form-actions {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .form-actions button {
+        flex: 1;
+        padding: 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .delete-btn {
+        background-color: #ffecec;
+        color: #d70000;
+    }
+
+    .delete-btn:hover {
+        background-color: #ffb3b3;
+    }
+
+    .save-btn {
+        background-color: #d4f5d4;
+        color: #007500;
+    }
+
+    .save-btn:hover {
+        background-color: #b8e0b8;
+    }
+
+    #task-start-date {
+        width: 120px;
+    }
+
+    #task-end-date {
+        width: 120px;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="task-details">
+    <h2>Описание задачи</h2>
+    <form>
+        <!-- Название -->
+        <div class="form-row">
+            <label for="task-name">Название</label>
+            <input type="text" id="task-name" name="task-name" value="{{ task.name }}" />
+        </div>
+
+        <!-- Описание -->
+        <div class="form-row">
+            <label for="task-desc">Описание</label>
+            <textarea id="task-desc" name="task-desc" rows="3">{{ task.description }}</textarea>
+        </div>
+
+        <!-- Дата начала, окончания, приоритет и статус -->
+        <div class="form-row-inline">
+            <div class="form-item">
+                <label for="task-start-date">Дата начала</label>
+                <input type="date" id="task-start-date" name="task-start-date" value="{{ task.start_date }}" />
+            </div>
+            <div class="form-item">
+                <label for="task-end-date">Дата окончания</label>
+                <input type="date" id="task-end-date" name="task-end-date" value="{{ task.end_date }}" />
+            </div>
+        </div>
+        <div class="form-row-inline">
+            <div class="form-item">
+                <label for="task-priority">Приоритет</label>
+                <select class="priority-label" id="task-priority">
+                    <option value="Низкий" class="priority-label low-priority">Низкий</option>
+                    <option value="Средний" class="priority-label medium-priority">Средний</option>
+                    <option value="Высокий" class="priority-label high-priority">Высокий</option>
+                </select>
+            </div>
+            <div class="form-item">
+                <label for="task-status">Статус</label>
+                <select class="status-label" id="task-status">
+                    <option value="Не начата" class="status-label not-started">Не начата</option>
+                    <option value="В процессе" class="status-label in-progress">В процессе</option>
+                    <option value="Завершена" class="status-label completed">Завершена</option>
+                    <option value="Архив" class="status-label archive">Архив</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Кнопки управления -->
+        <div class="form-actions">
+            <button type="button" class="delete-btn" id="delete-task">Удалить задачу</button>
+            <button type="button" class="save-btn" id="change-task">Изменить задачу</button>
+        </div>
+    </form>
+</div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const menuItems = document.querySelectorAll('.menu-item')
+
+        menuItems[1].classList.add('active')
+        menuItems[0].classList.remove('active')
+        menuItems[2].classList.remove('active')
+
+        const pageName = document.getElementById('page-name')
+        pageName.textContent = 'Задачи'
+
+        const priorityField = document.getElementById('task-priority')
+        const priority = '{{ task.priority }}'
+
+        switch (priority) {
+            case "Низкий":
+                priorityField.value = "Низкий"
+                priorityField.classList.add('low-priority')
+                break;
+            case "Средний":
+                priorityField.value = "Средний"
+                priorityField.classList.add('medium-priority')
+                break;
+            case "Высокий":
+                priorityField.value = "Высокий"
+                priorityField.classList.add('high-priority')
+                break;
+        }
+
+        const statusField = document.getElementById('task-status')
+        const status = '{{ task.status }}'
+
+        switch (status) {
+            case "Не начата":
+                statusField.value = "Не начата"
+                statusField.classList.add('not-started')
+                break;
+            case "В процессе":
+                statusField.value = "В процессе"
+                statusField.classList.add('in-progress')
+                break;
+            case "Завершена":
+                statusField.value = "Завершена"
+                statusField.classList.add('completed')
+                break;
+            case "Архив":
+                statusField.value = "Архив"
+                statusField.classList.add('archive')
+                break;
+        }
+    })
+
+    document.getElementById('change-task').addEventListener("click", async () => {
+        const taskData = {
+            name: document.getElementById('task-name').value,
+            description: document.getElementById('task-desc').value,
+            start_date: document.getElementById('task-start-date').value,
+            end_date: document.getElementById('task-end-date').value,
+            status: document.getElementById('task-status').value,
+            priority: document.getElementById('task-priority').value
+        }
+
+        const response = await fetch(`/tasks/{{ task.id }}/ch`, {
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(taskData),
+        })
+
+        if (response.ok) {
+            alert('Задача успешно изменена')
+        } else {
+            const errorData = await response.json()
+            alert(errorData.detail)
+        }
+    })
+
+    document.getElementById('delete-task').addEventListener("click", async () => {
+        const response = await fetch(`/tasks/{{ task.id }}/del`, {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'}
+        })
+
+        if (response.ok) {
+            alert('Задача удалена')
+            window.location.href = '/pages/tasks'
+        } else {
+            const errorData = await response.json()
+            alert(errorData.detail)
+        }
+    })
+</script>
+{% endblock %}

@@ -33,7 +33,7 @@ async def add_group(group_data: SGroupCreate, user: Users = Depends(get_current_
     return {"message": "Группа создана"}
 
 
-@router.patch("{group_id}/change")
+@router.patch("/{group_id}/change")
 async def change_group(group_id: int, group_data: SGroupCreate, user: Users = Depends(get_current_user)):
     group = await GroupsDAO.find_by_id_and_user(id=group_id, user_id=user.id)
     if group is None:

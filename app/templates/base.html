@@ -161,18 +161,56 @@
             background-color: #fff;
         }
 
+        .notification-popup {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+            width: 150px;
+            font-size: 14px;
+        }
+
+        .notification:hover .notification-popup {
+            display: block;
+        }
+
+        #date-time {
+            text-align: left;
+            font-family: Arial, sans-serif;
+            margin: 10px 0;
+        }
+
+        #today-title {
+            font-size: 28px;
+            margin: 0;
+        }
+
+        #current-date {
+            font-size: 16px;
+            color: gray;
+            margin: 5px 0 0 0;
+        }
+
         @font-face {
             font-family: "Roboto Thin";
             src: url("assets/css/fonts/RobotoMono-VariableFont_wght.ttf");
         }
     </style>
+    {% block style %}
+    {% endblock %}
 </head>
 <body class="layout">
     <header>
         <div class="logo">
             <span>To-Do</span>
         </div>
-        <div class="main">
+        <div class="main" id="page-name">
             <span>Главная</span>
         </div>
         <div class="search">
@@ -183,25 +221,28 @@
             <button class="notification">
                 <i class="fa fa-bell"></i>
                 <span class="notification-count">0</span>
+                <div class="notification-popup">
+                    <p id="task-cont">Количество задач: <span id="task-count">0</span></p>
+                </div>
             </button>
-            <span class="username">User</span>
+            <span class="username" id="nickname"></span>
             <div class="user-logo" style="background-color: #ffcc00"></div>
         </div>
     </header>
     <div class="content-wrapper">
         <aside class="sidebar">
             <ul class="menu">
-                <li class="menu-item active" id="menu-main">
+                <li class="menu-item" id="menu-main" data-link="/pages/main">
                     <button>
                         <span>Главная</span>
                     </button>
                 </li>
-                <li class="menu-item" id="menu-tasks">
+                <li class="menu-item" id="menu-tasks" data-link="/pages/tasks">
                     <button>
                         <span>Задачи</span>
                     </button>
                 </li>
-                <li class="menu-item" id="menu-groups">
+                <li class="menu-item" id="menu-groups" data-link="/pages/groups">
                     <button>
                         <span>Группы задач</span>
                     </button>
@@ -210,6 +251,10 @@
         </aside>
 
         <main class="main-container">
+            <div id="date-time">
+                <h2 id="today-title">Сегодня</h2>
+                <div id="current-date"></div>
+            </div>
             {% block content %}
             <!-- Здесь будет меняться контент страниц --->
             {% endblock %}
@@ -217,6 +262,54 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('nickname').textContent = localStorage.getItem('nickname')
+
+            const currentPath = window.location.pathname
+
+            const menuItems = document.querySelectorAll('.menu-item')
+
+            const pageName = document.getElementById('page-name')
+
+            menuItems.forEach((item) => {
+                const link = item.dataset.link
+
+                if (link === currentPath) {
+                    item.classList.add('active')
+                } else {
+                    item.classList.remove('active')
+                }
+            })
+
+            switch (currentPath) {
+                case '/pages/main':
+                    pageName.textContent = 'Главная'
+                    break
+                case '/pages/tasks':
+                    pageName.textContent = 'Задачи'
+                    break
+                case '/pages/groups':
+                    pageName.textContent = 'Группы задач'
+                    break
+            }
+
+            const currentDate = document.getElementById('current-date')
+
+            function updateDateTime() {
+                const now = new Date()
+                const options = {year: 'numeric', month: 'short', day: 'numeric', weekday: undefined}
+                const formatDate = now.toLocaleDateString('ru-RU', options).replace('.', '')
+                const formatTime = now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit', second: '2-digit'})
+
+                currentDate.textContent = `${formatDate} | ${formatTime}`
+            }
+
+            updateDateTime();
+            setInterval(updateDateTime, 1000)
+
+
+        })
+
         document.getElementById('menu-main').addEventListener('click', () => {
             window.location.href = '/pages/main'
         })
@@ -228,6 +321,8 @@
         document.getElementById('menu-groups').addEventListener('click', () => {
             window.location.href = '/pages/groups'
         })
+
+
     </script>
     {% block scripts %}
 
